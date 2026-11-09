@@ -1,0 +1,50 @@
+@model List<ProductViewModel>
+@{ ViewData["Title"] = "Products"; }
+
+@if (ViewBag.Error is string apiError)
+{
+    <div class="alert alert-danger">@apiError</div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Products</h2>
+    <a class="btn btn-primary" asp-action="Create">+ Add Product</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th class="text-end">Price</th>
+                    <th class="text-end" style="width:170px">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Name</td>
+                    <td>@p.CategoryName</td>
+                    <td class="text-end">@p.Price.ToString("N2")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@p.Id">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@p.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this product?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="5" class="text-center text-muted py-4">No products yet.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+@model List<CategoryViewModel>
+@{ ViewData["Title"] = "Categories"; }
+
+@if (ViewBag.Error is string apiError)
+{
+    <div class="alert alert-danger">@apiError</div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Categories</h2>
+    <a class="btn btn-primary" asp-action="Create">+ Add Category</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Products</th>
+                    <th class="text-end" style="width:170px">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Id</td>
+                    <td>@c.Name</td>
+                    <td>@c.ProductsCount</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@c.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this category?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="4" class="text-center text-muted py-4">No categories yet.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
